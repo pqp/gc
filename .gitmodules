@@ -1,0 +1,3 @@
+[submodule "benny"]
+	path = benny
+	url = https://github.com/pqp/benny

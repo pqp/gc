@@ -1,0 +1,28 @@
+# Services, etc
+version: "3"
+services:
+    dnsmasq:
+        privileged: true
+        build:
+            context: ./dnsmasq/
+        ports:
+            - "2222:2222"
+        volumes:
+            - ./config/dnsmasq/:/app/config
+
+    mumble:
+        privileged: true
+        build:
+            context: ./mumble/
+        ports:
+            - "64738:64738"
+        volumes:
+            - ./config/mumble:/app/config
+
+    benny:
+        build:
+            context: ./benny/
+        depends_on:
+            - "mumble"
+        volumes:
+            - ./config/benny:/app/config
