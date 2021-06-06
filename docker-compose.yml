@@ -4,7 +4,7 @@ services:
     dnsmasq:
         privileged: true
         build:
-            context: ./dnsmasq/
+            context: services/dnsmasq/
         ports:
             - "2222:2222"
         volumes:
@@ -13,15 +13,16 @@ services:
     mumble:
         privileged: true
         build:
-            context: ./mumble/
+            context: services/mumble/
         ports:
             - "64738:64738"
         volumes:
             - ./config/mumble:/app/config
+            - ./data:/var/lib/mumble-server
 
     benny:
         build:
-            context: ./benny/
+            context: services/benny/
         depends_on:
             - "mumble"
         volumes:
