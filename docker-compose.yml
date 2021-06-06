@@ -1,5 +1,5 @@
 # Services, etc
-version: "3"
+version: "3.4"
 services:
     dnsmasq:
         privileged: true
@@ -16,9 +16,10 @@ services:
             context: services/mumble/
         ports:
             - "64738:64738"
+            - "6502:6502"
         volumes:
             - ./config/mumble:/app/config
-            - ./data:/var/lib/mumble-server
+            - ./data/sql:/var/lib/mumble-server
 
     benny:
         build:
@@ -27,3 +28,21 @@ services:
             - "mumble"
         volumes:
             - ./config/benny:/app/config
+
+    mumble-json:
+        build:
+            context: services/mumble-json
+        depends_on: 
+            - "mumble"
+        restart: on-failure
+        network_mode: host
+        volumes:
+            - ./data/json:/app/json
+
+    nginx:
+        build:
+            context: services/viewer/
+        ports:
+            - "80:80"
+        volumes:
+            - ./config/viewer:/app/config

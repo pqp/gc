@@ -1,3 +1,6 @@
 [submodule "benny"]
 	path = services/benny
 	url = https://github.com/pqp/benny
+[submodule "services/mumble-json"]
+	path = services/mumble-json
+	url = https://github.com/pqp/mumble-json

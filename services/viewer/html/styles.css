@@ -1,0 +1,41 @@
+header {
+    margin-left: 40px;
+}
+
+section {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+li {
+    margin-left: 40px;
+}
+
+footer {
+    display: flex;
+}
+
+#time {
+    font-family: 'Noto Sans JP', sans-serif;
+    position: fixed;
+    bottom: 0;
+}
+
+body {
+    color: var(--foreground);
+    background-color: var(--background);
+    opacity: var(--opacity);
+}
+
+.light {
+    --background: #DEE4E7;
+    --foreground: #000000;
+    --opacity: 100%;
+}
+
+.dark {
+    --background: #121212;
+    --foreground: #FFFFFF;
+    --opacity: 87%;
+}
+
+
