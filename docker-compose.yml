@@ -9,6 +9,8 @@ services:
             - "2222:2222"
         volumes:
             - ./config/dnsmasq/:/app/config
+        networks:
+            - gc-network
 
     mumble:
         privileged: true
@@ -18,8 +20,10 @@ services:
             - "64738:64738"
             - "6502:6502"
         volumes:
-            - ./config/mumble:/app/config
+            - ./config/mumble/mumble-server.ini:/etc/mumble-server.ini
             - ./data/sql:/var/lib/mumble-server
+        networks:
+            - gc-network
 
     benny:
         build:
@@ -28,6 +32,8 @@ services:
             - "mumble"
         volumes:
             - ./config/benny:/app/config
+        networks:
+            - gc-network
 
     mumble-json:
         build:
@@ -35,14 +41,54 @@ services:
         depends_on: 
             - "mumble"
         restart: on-failure
-        network_mode: host
         volumes:
             - ./data/json:/app/json
+        networks:
+            - gc-network
 
-    nginx:
-        build:
-            context: services/viewer/
+    web:
+        image: nginx:mainline-alpine
         ports:
             - "80:80"
+            - "443:443"
         volumes:
-            - ./config/viewer:/app/config
+            - web-root:/var/www/html
+            - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - certbot-etc:/etc/letsencrypt
+            - certbot-var:/var/lib/letsencrypt
+            - dhparam:/etc/ssl/certs
+        networks:
+            - gc-network
+
+    certbot:
+        image: certbot/certbot
+        volumes:
+            - certbot-var:/var/lib/letsencrypt
+            - certbot-etc:/etc/letsencrypt
+            - web-root:/var/www/html
+        depends_on:
+            - web
+        command: certonly --webroot --webroot-path=/var/www/html --email email@example.com --agree-tos --no-eff-email -d example.com
+        networks:
+            - gc-network
+        
+volumes:
+    certbot-etc:
+    certbot-var:
+    web-root:
+        driver: local
+        driver_opts:
+            type: none
+            device: services/viewer/html
+            o: bind
+    dhparam:
+        driver: local
+        driver_opts:
+            type: none
+            device: certs/ssl
+            o: bind
+
+
+networks:
+    gc-network:
+        driver: bridge
