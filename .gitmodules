@@ -4,3 +4,6 @@
 [submodule "services/mumble-json"]
 	path = services/mumble-json
 	url = https://github.com/pqp/mumble-json
+[submodule "botamusique"]
+	path = services/botamusique
+	url = https://github.com/azlux/botamusique
