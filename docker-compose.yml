@@ -21,6 +21,7 @@ services:
             - "6502:6502"
         volumes:
             - ./config/mumble/mumble-server.ini:/etc/mumble-server.ini
+            - mumble-slice:/usr/share/slice/
             - ./data/sql:/var/lib/mumble-server
         networks:
             - gc-network
@@ -35,16 +36,30 @@ services:
         networks:
             - gc-network
 
-    mumble-json:
+    botamusique:
         build:
-            context: services/mumble-json
+            context: services/botamusique/
         depends_on: 
             - "mumble"
-        restart: on-failure
         volumes:
-            - ./data/json:/app/json
+            - ./config/botamusique/configuration.ini:/botamusique/configuration.ini
         networks:
             - gc-network
+
+    mumble-json:
+        build:
+            context: services/mumble-json/
+        depends_on: 
+            - "mumble"
+        restart: always
+        volumes:
+            - web-root:/var/www/html
+            - mumble-slice:/usr/share/slice/
+        networks:
+            - gc-network
+        environment: 
+            - MUMBLE_URL=mumble:6502
+        command: bash mumble-json.sh
 
     web:
         image: nginx:mainline-alpine
@@ -68,26 +83,26 @@ services:
             - web-root:/var/www/html
         depends_on:
             - web
-        command: certonly --webroot --webroot-path=/var/www/html --email email@example.com --agree-tos --no-eff-email -d example.com
+        command: "certonly --webroot --webroot-path=/var/www/html --email ${CERT_EMAIL} --agree-tos --no-eff-email ${CERT_DOMAIN}"
         networks:
             - gc-network
         
 volumes:
     certbot-etc:
     certbot-var:
+    mumble-slice:
     web-root:
         driver: local
         driver_opts:
             type: none
-            device: services/viewer/html
+            device: ${HTML_DIR}
             o: bind
     dhparam:
         driver: local
         driver_opts:
             type: none
-            device: certs/ssl
+            device: ${SSL}
             o: bind
-
 
 networks:
     gc-network:
