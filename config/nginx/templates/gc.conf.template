@@ -1,0 +1,44 @@
+server {
+		listen ${NGINX_HTTP_PORT};
+		listen [::]:${NGINX_HTTP_PORT};
+	
+		root /var/www/html;
+		index index.html index.htm index.nginx-debian.html;
+	
+		server_name ${NGINX_HOST};
+	
+		#location / {
+		#	try_files $uri $uri/ =404;
+		#}
+	
+		location ~ /.well-known/acme-challenge {
+			allow all;
+			root /var/www/html;
+		}
+
+		# Redirect HTTP requests to HTTPS
+		location / {
+			rewrite ^ https://$host$request_uri? permanent;
+		}
+}
+
+server {
+		root /var/www/html;
+		index index.html index.htm index.nginx-debian.html;
+
+		server_name ${NGINX_HOST};
+
+		location / {
+			try_files $uri $uri/ =404;
+		}
+
+		listen ${NGINX_HTTPS_PORT} ssl http2;
+		listen [::]:${NGINX_HTTPS_PORT} ssl http2;
+		server_name ${NGINX_HOST};
+
+		ssl_protocols TLSv1.2;
+		ssl_certificate /etc/letsencrypt/live/${NGINX_HOST}/fullchain.pem;
+		ssl_certificate_key /etc/letsencrypt/live/${NGINX_HOST}/privkey.pem;
+
+		ssl_dhparam /etc/ssl/certs/dhparam-2048.pem;
+}

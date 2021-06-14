@@ -4,6 +4,7 @@ const root = document.createElement('ul');
 
 const requestURL = 'server.json';
 let button = document.getElementById('darktoggle');
+let timestamp = document.getElementById('time');
 
 function updateButtonText()
 {
@@ -97,9 +98,18 @@ function printChannel(channel, parentData, parentList)
         for (let i = 0; i < users.length; i++) {
             let user = users[i];
             let userName = users[i]['name'];
-            let userItem = document.createElement('li');
+            let deafened = users[i]['selfDeaf'];
+            let muted = users[i]['selfMute'];
 
-            userItem.textContent = userName;
+            let userItem = document.createElement('li');
+            let userAttrib = document.createElement('span');
+	        userAttrib.style = "color: #AA1111";
+
+            if (deafened) userAttrib.textContent += " D";
+            if (muted) userAttrib.textContent += " M";
+            userItem.innerHTML = `<span>${userName}</span>`
+	        userItem.append(userAttrib);
+
             // write the list item to the DOM
             list.appendChild(userItem);
         }
@@ -120,8 +130,14 @@ function printData(json)
         return;
     }
 
+    let now = json['time_fetched'];
+    let date = Date(now);
+
+    timestamp.textContent = 'DATA FROM: ' + date.toLocaleString();
+
     let channels = json['root']['channels']; 
     root.textContent = json['name'];
+
     // iterate through each channel and build an unordered list from it
     for (let i = 0; i < channels.length; i++) {
         let channel = printChannel(channels[i], null, null);
@@ -135,7 +151,7 @@ function printData(json)
 
 function refresh()
 {
-    root.innerHTML = "<p>Reloading...</p>";
+    //root.innerHTML = "<p>Reloading...</p>";
 
     let request = fetchJSON(requestURL);
 

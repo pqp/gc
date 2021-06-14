@@ -6,9 +6,13 @@ services:
         ports:
             - "80:80"
             - "443:443"
+        environment: 
+            - NGINX_HOST=${NGINX_HOST}
+            - NGINX_HTTP_PORT=${NGINX_HTTP_PORT}
+            - NGINX_HTTPS_PORT=${NGINX_HTTPS_PORT}
         volumes:
+            - ./config/nginx/templates/gc.init.conf.template:/etc/nginx/templates/gc.init.conf.template:rw,cached
             - web-root:/var/www/html
-            - ./config/nginx/nginx.init.conf:/etc/nginx/nginx.conf:ro
             - certbot-etc:/etc/letsencrypt
             - certbot-var:/var/lib/letsencrypt
             - dhparam:/etc/ssl/certs
