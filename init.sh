@@ -8,7 +8,7 @@ git submodule init
 git submodule update
 
 cd services/mumble-json; git checkout gc
-git pull origin gc
+git pull origin gc; cd ${CD}
 
 echo "Please type the hostname:"
 read hostname
