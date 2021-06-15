@@ -1,31 +1,36 @@
-* GC
+GC
+================
 
 This is a collection of Docker containers that compose the servers and bots that we use in GC.
 
-** Installing
+Installing
+------------
 
-** Configuring
+Configuring
+------------
 
-*** Make sure your firewall is configured--UFW will do in a pinch.
+### Make sure your firewall is configured--UFW will do in a pinch.
     - Open SSH port (default: 22)
     - Open 64738 for Mumble
 
-*** Generate a private SSL cert
-- `$ openssl dhparam -out dhparam-2048.pem 2048
+### Generate a private SSL cert
+- `$ openssl dhparam -out dhparam-2048.pem 2048`
 
-*** Assign ownership of /data according to uid and gid of murmur (for the sqlite database)
-- `$ chown 106:109 data
+### Assign ownership of /data according to uid and gid of murmur (for the sqlite database)
+- `$ chown 106:109 data`
 
-** Considerations
+Considerations
+------------
 
-*** Configure proper Ice endpoints
- in mumble-server.ini:
- `
-ice="tcp -h mumble -p 6502"
+### Configure proper Ice endpoints
+
+in mumble-server.ini:
+
+`ice="tcp -h mumble -p 6502"`
 
 in mumble-json.py:
 
-proxy = comm.stringToProxy('Meta -e 1.0:tcp -h mumble -p ' + str(ICE_PORT))
+`proxy = comm.stringToProxy('Meta -e 1.0:tcp -h mumble -p ' + str(ICE_PORT))`
 
 Make sure dnsmasq is properly configured.
 

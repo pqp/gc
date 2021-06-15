@@ -32,7 +32,7 @@ services:
         depends_on:
             - "mumble"
         volumes:
-            - ./config/benny:/app/config
+            - ./config/benny/benny.json:/app/benny.json
         networks:
             - gc-network
 

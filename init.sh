@@ -7,7 +7,7 @@ echo "Initializing Git submodules..."
 git submodule init
 git submodule update
 
-cd services/mumble-json; git checkout -b gc
+cd services/mumble-json; git checkout gc
 git pull origin gc
 
 echo "Please type the hostname:"
