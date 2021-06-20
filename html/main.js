@@ -78,6 +78,24 @@ function errorMsg(msg)
     root.textContent = msg;
 }
 
+function buildItem(user)
+{
+    let userName = user['name'];
+    let deafened = user['selfDeaf'];
+    let muted = user['selfMute'];
+
+    let userItem = document.createElement('li');
+    let userAttrib = document.createElement('span');
+    userAttrib.style = "color: #AA1111";
+
+    if (deafened) userAttrib.textContent += " D";
+    if (muted) userAttrib.textContent += " M";
+    userItem.innerHTML = `<span>${userName}</span>`
+    userItem.append(userAttrib);
+
+    return userItem;
+}
+
 function printChannel(channel, parentData, parentList)
 {
     let users = channel['users'];
@@ -97,19 +115,7 @@ function printChannel(channel, parentData, parentList)
         // iterate through each user in the channel and build a list item element from it
         for (let i = 0; i < users.length; i++) {
             let user = users[i];
-            let userName = users[i]['name'];
-            let deafened = users[i]['selfDeaf'];
-            let muted = users[i]['selfMute'];
-
-            let userItem = document.createElement('li');
-            let userAttrib = document.createElement('span');
-	        userAttrib.style = "color: #AA1111";
-
-            if (deafened) userAttrib.textContent += " D";
-            if (muted) userAttrib.textContent += " M";
-            userItem.innerHTML = `<span>${userName}</span>`
-	        userItem.append(userAttrib);
-
+            userItem = buildItem(user); 
             // write the list item to the DOM
             list.appendChild(userItem);
         }
@@ -132,11 +138,19 @@ function printData(json)
 
     let now = json['time_fetched'];
     let date = Date(now);
-
     timestamp.textContent = 'DATA FROM: ' + date.toLocaleString();
 
     let channels = json['root']['channels']; 
     root.textContent = json['name'];
+
+    // iterate through users in root of server
+    let root_users = json['root']['users'];
+
+    for (let i = 0; i < root_users.length; i++) {
+        let user = root_users[i];
+        let userItem = buildItem(user);
+        root.appendChild(userItem);
+    }
 
     // iterate through each channel and build an unordered list from it
     for (let i = 0; i < channels.length; i++) {

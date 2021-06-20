@@ -1,9 +1,9 @@
 {
     "password": "",
-    "server": "0.0.0.0",
+    "server": "mumble",
     "nick": "Benny",
     "port": "6120",
-    "channel": "Lobby",
+    "channel": "",
     "certfile": "",
     "away_channel": "Away",
     "idle_min": "60",

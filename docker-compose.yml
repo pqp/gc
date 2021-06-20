@@ -5,6 +5,7 @@ services:
         privileged: true
         build:
             context: services/dnsmasq/
+        restart: unless-stopped
         ports:
             - "2222:2222"
         volumes:
@@ -16,8 +17,9 @@ services:
         privileged: true
         build:
             context: services/mumble/
+        restart: unless-stopped
         ports:
-            - "64738:64738"
+            - "6120:6120"
             - "6502:6502"
         volumes:
             - ./config/mumble/mumble-server.ini:/etc/mumble-server.ini
@@ -29,6 +31,7 @@ services:
     benny:
         build:
             context: services/benny/
+        restart: unless-stopped
         depends_on:
             - "mumble"
         volumes:
@@ -41,6 +44,7 @@ services:
             context: services/botamusique/
         depends_on: 
             - "mumble"
+        restart: unless-stopped
         volumes:
             - ./config/botamusique/configuration.ini:/botamusique/configuration.ini
         networks:
@@ -51,7 +55,7 @@ services:
             context: services/mumble-json/
         depends_on: 
             - "mumble"
-        restart: always
+        restart: unless-stopped
         volumes:
             - web-root:/var/www/html
             - mumble-slice:/usr/share/slice/
@@ -63,6 +67,7 @@ services:
 
     web:
         image: nginx:mainline-alpine
+        restart: unless-stopped
         ports:
             - "80:80"
             - "443:443"
