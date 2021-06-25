@@ -6,8 +6,8 @@ services:
         build:
             context: services/dnsmasq/
         restart: unless-stopped
-        ports:
-            - "2222:2222"
+        expose:
+            - "2222"
         volumes:
             - ./config/dnsmasq/:/app/config
         networks:
@@ -19,14 +19,33 @@ services:
             context: services/mumble/
         restart: unless-stopped
         ports:
-            - "6120:6120"
-            - "6502:6502"
+            - "6120:6120/udp"
+            - "6120:6120/tcp"
+        expose:
+            - "6502"
         volumes:
-            - ./config/mumble/mumble-server.ini:/etc/mumble-server.ini
+            - certbot-etc:/etc/letsencrypt/:ro
             - mumble-slice:/usr/share/slice/
+            - ./config/mumble/mumble-server.ini:/etc/mumble-server.ini
             - ./data/sql:/var/lib/mumble-server
         networks:
             - gc-network
+
+    nextcloud:
+        image: efrecon/webdav-client
+        devices:
+            - "/dev/fuse:/dev/fuse"
+        cap_add:
+            - SYS_ADMIN
+        security_opt: 
+            - apparmor:unconfined
+        environment:
+            - WEBDRIVE_USERNAME=${WEBDRIVE_USERNAME}
+            - WEBDRIVE_PASSWORD=${WEBDRIVE_PASSWORD}
+            - WEBDRIVE_URL=${WEBDRIVE_URL}
+            - DAVFS2_ASK_AUTH=0
+        volumes:
+            - /mnt/webdrive:/mnt/webdrive:rshared
 
     benny:
         build:
@@ -34,8 +53,10 @@ services:
         restart: unless-stopped
         depends_on:
             - "mumble"
+            - "nextcloud"
         volumes:
             - ./config/benny/benny.json:/app/benny.json
+            - /mnt/webdrive:/mnt/webdrive:rshared
         networks:
             - gc-network
 
@@ -87,8 +108,8 @@ services:
     certbot:
         image: certbot/certbot
         volumes:
-            - certbot-var:/var/lib/letsencrypt
             - certbot-etc:/etc/letsencrypt
+            - certbot-var:/var/lib/letsencrypt
             - web-root:/var/www/html
         depends_on:
             - web
@@ -100,6 +121,7 @@ volumes:
     certbot-etc:
     certbot-var:
     mumble-slice:
+    webdrive:
     web-root:
         driver: local
         driver_opts:

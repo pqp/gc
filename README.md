@@ -17,7 +17,13 @@ Configuring
 - `$ openssl dhparam -out dhparam-2048.pem 2048`
 
 ### Assign ownership of /data according to uid and gid of murmur (for the sqlite database)
-- `$ chown 106:109 data`
+- `$ chown -R 106:109 data`
+
+### Add paths to your Let's Encrypt certificate in mumble-server.ini:
+- `sslCert=/etc/letsencrypt/live/example.com/fullchain.pem
+   sslKey=/etc/letsencrypt/live/example.com/privkey.pem`
+
+### Add cert renewal to cronjob
 
 Considerations
 ------------

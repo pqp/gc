@@ -10,7 +10,7 @@
     "idle_ignore_names": ["OtherBot"],
     "stereo": true,
     "library": {
-        "path": "snd/",
+        "path": "/mnt/webdrive/",
         "allowed_file_types": [".wav", ".mp3", ".ogg"]
     }
 }
