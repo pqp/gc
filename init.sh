@@ -29,7 +29,7 @@ read domain
 echo "Please type a Nextcloud server URL:"
 read nc_url
 echo "Please type a Nextcloud username:"
-read nc_name
+read nc_user
 echo "Please type that Nextcloud account's password:"
 read nc_pass
 
@@ -45,7 +45,6 @@ echo "CERT_DOMAIN=-d ${hostname}"
 echo "WEBDRIVE_URL=${nc_url}"
 echo "WEBDRIVE_USERNAME=${nc_user}"
 echo "WEBDRIVE_PASSWORD=${nc_pass}"
-
 
 echo "NGINX_HOST=${hostname}" >> .env
 echo "NGINX_HTTP_PORT=80" >> .env
