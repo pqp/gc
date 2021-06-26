@@ -11,7 +11,7 @@ Configuring
 
 ### Make sure your firewall is configured--UFW will do in a pinch.
     - Open SSH port (default: 22)
-    - Open 64738 for Mumble
+    - Open 6120 (or whichever port you choose) for Mumble (both TCP and UDP)
 
 ### Generate a private SSL cert
 - `$ openssl dhparam -out dhparam-2048.pem 2048`
@@ -20,10 +20,12 @@ Configuring
 - `$ chown -R 106:109 data`
 
 ### Add paths to your Let's Encrypt certificate in mumble-server.ini:
-- `sslCert=/etc/letsencrypt/live/example.com/fullchain.pem
-   sslKey=/etc/letsencrypt/live/example.com/privkey.pem`
+-```
+    sslCert=/etc/letsencrypt/live/example.com/fullchain.pem
+    sslKey=/etc/letsencrypt/live/example.com/privkey.pem```
 
 ### Add cert renewal to cronjob
+- `0 12 * * * /home/user/gc/cert_renew.sh /home/user/gc >> /var/log/cron.log 2>&1`
 
 Considerations
 ------------
