@@ -26,6 +26,12 @@ echo "Please type an email address:"
 read email
 echo "Please type the domain (example: '-d webzone.org'):"
 read domain
+echo "Please type a Nextcloud server URL:"
+read nc_url
+echo "Please type a Nextcloud username:"
+read nc_name
+echo "Please type that Nextcloud account's password:"
+read nc_pass
 
 echo "Alright. Here's the information that we're writing to .env:"
 
@@ -36,6 +42,10 @@ echo "HTML_DIR=${CD}/html"
 echo "SSL=${CD}/certs/ssl"
 echo "CERT_EMAIL=${email}"
 echo "CERT_DOMAIN=-d ${hostname}"
+echo "WEBDRIVE_URL=${nc_url}"
+echo "WEBDRIVE_USERNAME=${nc_user}"
+echo "WEBDRIVE_PASSWORD=${nc_pass}"
+
 
 echo "NGINX_HOST=${hostname}" >> .env
 echo "NGINX_HTTP_PORT=80" >> .env
@@ -44,3 +54,6 @@ echo "HTML_DIR=${CD}/html" >> .env
 echo "SSL=${CD}/certs/ssl" >> .env
 echo "CERT_EMAIL=${email}" >> .env
 echo "CERT_DOMAIN=-d ${hostname}" >> .env
+echo "WEBDRIVE_URL=${nc_url}" >> .env
+echo "WEBDRIVE_USERNAME=${nc_user}" >> .env
+echo "WEBDRIVE_PASSWORD=${nc_pass}" >> .env
