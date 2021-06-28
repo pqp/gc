@@ -20,9 +20,8 @@ Configuring
 - `$ chown -R 106:109 data`
 
 ### Add paths to your Let's Encrypt certificate in mumble-server.ini:
--```
-    sslCert=/etc/letsencrypt/live/example.com/fullchain.pem
-    sslKey=/etc/letsencrypt/live/example.com/privkey.pem```
+- `sslCert=/etc/letsencrypt/live/example.com/fullchain.pem`
+  `sslKey=/etc/letsencrypt/live/example.com/privkey.pem`
 
 ### Add cert renewal to cronjob
 - `0 12 * * * /home/user/gc/cert_renew.sh /home/user/gc >> /var/log/cron.log 2>&1`
