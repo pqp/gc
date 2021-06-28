@@ -18,7 +18,18 @@ server {
 
 	# Redirect HTTP requests to HTTPS
 	location / {
-		rewrite ^ https://$host$request_uri? permanent;
+		rewrite ^ https://${NGINX_HOST}$request_uri? permanent;
+	}
+}
+
+server {
+	listen ${NGINX_HTTP_PORT};
+	listen [::]:${NGINX_HTTP_PORT};
+
+	server_name www.status.game-central.party status.game-central.party;
+
+	location / {
+		rewrite ^ https://${NGINX_HOST}$request_uri? permanent;
 	}
 }
 
@@ -36,7 +47,24 @@ server {
 	listen [::]:${NGINX_HTTPS_PORT} ssl http2;
 	server_name ${NGINX_HOST};
 
-	ssl_protocols TLSv1.2;
+	ssl_protocols TLSv1.3;
+	ssl_certificate /etc/letsencrypt/live/${NGINX_HOST}/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/${NGINX_HOST}/privkey.pem;
+
+	ssl_dhparam /etc/ssl/certs/dhparam-2048.pem;
+}
+
+server {
+	server_name www.status.game-central.party status.game-central.party;
+
+	location / {
+		rewrite ^ https://${NGINX_HOST}$request_uri? permanent;
+	}
+
+	listen ${NGINX_HTTPS_PORT} ssl http2;
+	listen [::]:${NGINX_HTTPS_PORT} ssl http2;
+
+	ssl_protocols TLSv1.3;
 	ssl_certificate /etc/letsencrypt/live/${NGINX_HOST}/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/${NGINX_HOST}/privkey.pem;
 
