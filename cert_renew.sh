@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COMPOSE="docker-compose --no-ansi"
+COMPOSE="docker-compose --ansi never"
 DOCKER="docker"
 
 DIR=$1

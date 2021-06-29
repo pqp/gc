@@ -3,7 +3,7 @@
     "server": "mumble",
     "nick": "Benny",
     "port": "6120",
-    "channel": "",
+    "channel": "Lobby",
     "certfile": "",
     "away_channel": "Away",
     "idle_min": "60",
