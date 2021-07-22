@@ -35,6 +35,7 @@ services:
         image: efrecon/webdav-client
         devices:
             - "/dev/fuse:/dev/fuse"
+        restart: unless-stopped
         cap_add:
             - SYS_ADMIN
         security_opt: 
